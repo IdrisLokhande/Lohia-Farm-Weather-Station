@@ -9,14 +9,14 @@
 
 **Lohia Farm / GeoSense** is a web-based environmental monitoring system for a farm weather station. The project connects sensor telemetry to a browser dashboard, performs basic data cleaning and derived-weather calculations, displays historical trends, exports recorded data as CSV, and provides an alert subscription system.
 
-The current repository is primarily a **React + Firebase application**. There is no Express/Node.js API server in the current implementation. A separate set of Python workers under `email_alerts/` listens to Firebase and sends email/SMS notifications.
+The current repository is primarily a **React + Firebase application**. A separate set of Python workers under `email_alerts/` listens to Firebase and sends email/SMS notifications.
 
 The system currently works with these measurements:
 
 - Temperature
 - Relative humidity
 - Atmospheric pressure
-- Ambient light / illuminance
+- Ambient light
 - CO₂ concentration
 - PM1.0
 - PM2.5
@@ -85,7 +85,7 @@ The Python subscriber worker watches this path and sends confirmation messages. 
 
 ### Threshold alerts
 
-The Python alert engine monitors incoming weather records and currently checks these configured thresholds:
+The Python alert engine monitors incoming weather records and currently checks these currently configured thresholds:
 
 | Parameter | Alert threshold |
 |---|---:|
@@ -265,16 +265,7 @@ lohia-farm-weather-hub-05-main/
 │
 ├── public/
 │   ├── robots.txt
-│   └── team/
-│       ├── Abdullah.png
-│       ├── Danish.png
-│       ├── Hussain.png
-│       ├── Idris.png
-│       ├── Irfan.png
-│       ├── Mueez.png
-│       ├── Rehan.png
-│       ├── Zaid.png
-│       └── team
+│   └── team/...
 │
 ├── email_alerts/
 │   ├── config.py
@@ -388,8 +379,6 @@ subscribers/
     unsubscribe_request: boolean
 ```
 
-The exact producer-side hardware code is not included in this repository, so the weather-station firmware/data-ingestion implementation is outside the scope of this project.
-
 ## Firebase Rules
 
 `database.rules.json` currently indexes:
@@ -397,10 +386,7 @@ The exact producer-side hardware code is not included in this repository, so the
 - `weather.timestamp`
 - `subscribers.email`
 
-However, the current rule file contains time-based read/write rules with an expiration timestamp. That timestamp corresponds to **April 5, 2026 UTC**, so these rules are already expired relative to the current repository review date.
-
-Before deploying the application, replace the temporary rules with explicit production access rules. In particular, avoid relying on a globally readable/writable database for a public deployment.
-
+However, the current rule file contains time-based read/write rules with an old expiration timestamp, so these rules are already expired relative to the current repository review date.
 
 ## Running the Python Alert Workers
 
@@ -493,7 +479,7 @@ There are several independent layers of status logic in the current implementati
 
 The React dashboard assigns `Good`, `Moderate`, or `Poor` status using metric-specific ranges for temperature, humidity, pressure, light, CO₂, and AQI.
 
-These display bands are not identical to the Python alert thresholds. A metric can therefore appear as `Poor` in the dashboard without generating an alert, or cross an alert threshold while using a different visual status boundary.
+These display bands are not identical to the Python alert thresholds yet. A metric can therefore appear as `Poor` in the dashboard without generating an alert, or cross an alert threshold while using a different visual status boundary.
 
 ### Sensor data cleaning
 
@@ -533,7 +519,7 @@ The trend popup and CSV exporter use Firebase queries ordered by `timestamp`. Th
 
 Firestore should therefore be considered available infrastructure rather than an active source for the current dashboard implementation.
 
-### AQI logic is duplicated
+### AQI logic is currently duplicated
 
 The India AQI calculation exists in both TypeScript and Python. If the breakpoint table changes, both implementations need to be updated together or consolidated into a shared service/specification.
 
@@ -607,12 +593,8 @@ Our Team GeoSense roles for eLSI Wada Hackathon:
 | Rehan Shaikh | Frontend Developer |
 
 
-## License
-
-A license file is not included in the reviewed repository snapshot. Add an explicit `LICENSE` file before distributing the project if a specific open-source or proprietary license is intended.
-
 ## Development Philosophy
 
 This project combines IoT telemetry, environmental calculations, frontend visualization, Firebase data services, data cleaning, and notification automation in one learning-oriented system.
 
-The main design goal is straightforward: collect sensor data, make the data understandable, surface abnormal conditions, and keep the architecture simple enough to inspect and extend.
+The main design goal is straightforward: collect ESP32 sensor data, make the data understandable, surface abnormal conditions, and keep the architecture simple enough to inspect and extend.
