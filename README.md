@@ -5,6 +5,17 @@
 > and Python alert workers for email/SMS notifications.
 > Built as a full-stack IoT / environmental-monitoring project by Team GeoSense, AIKTC.
 
+## License
+
+The source code of this project is licensed under the Apache License, Version 2.0.
+
+You may obtain a copy of the License at:
+https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, this software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.
+
+Third-party libraries, services, datasets, icons, images, fonts, and other external materials included in or used by the project remain subject to their respective licenses and terms.
+
 ## Overview
 
 **Lohia Farm / GeoSense** is a web-based environmental monitoring system for a farm weather station. The project connects sensor telemetry to a browser dashboard, performs basic data cleaning and derived-weather calculations, displays historical trends, exports recorded data as CSV, and provides an alert subscription system.
